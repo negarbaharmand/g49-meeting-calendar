@@ -12,6 +12,7 @@ import se.lexicon.view.CalendarConsoleUI;
 import se.lexicon.view.CalendarView;
 
 import java.sql.Connection;
+import java.util.Optional;
 
 /**
  * Hello world!
@@ -19,12 +20,26 @@ import java.sql.Connection;
 public class App {
     public static void main(String[] args) {
 
-        Connection connection = MeetingCalendarDBConnection.getConnection();
+       /* Connection connection = MeetingCalendarDBConnection.getConnection();
         CalendarView view = new CalendarConsoleUI();
         UserDao userDao = new UserDaoImpl(connection);
         CalendarDao calendarDao = new CalendarDaoImpl(connection);
         CalendarController controller = new CalendarController(view, userDao, calendarDao);
-        controller.run();
+        controller.run();*/
+
+        try {
+            UserDao userDao = new UserDaoImpl(MeetingCalendarDBConnection.getConnection());
+
+            User createdUser = userDao.createUser("admin");
+            System.out.println("user info: " + createdUser.userInfo());
+
+            Optional<User> userOptional = userDao.findByUsername("admin");
+            if (userOptional.isPresent()) {
+                System.out.println("Hashed passcode: " + userOptional.get().getHashedPassword());
+            }
+        } catch (Exception e) {
+            CalendarExceptionHandler.handleException(e);
+        }
 
 
     }

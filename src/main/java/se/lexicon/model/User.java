@@ -1,7 +1,7 @@
 package se.lexicon.model;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import se.lexicon.exception.AuthenticationFieldsException;
+import se.lexicon.exception.AuthenticationFailedException;
 
 import java.security.SecureRandom;
 import java.util.Random;
@@ -48,11 +48,11 @@ public class User {
     }
 
     //compare the hashed passcode to a raw passcode return boolean
-    public void checkHash(String hashedPassword) throws AuthenticationFieldsException {
+    public void checkHash(String hashedPassword) throws AuthenticationFailedException {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         boolean isEqual = passwordEncoder.matches(this.password, hashedPassword);
         if (!isEqual) {
-            throw new AuthenticationFieldsException("Authentication failed. Invalid credentials.");
+            throw new AuthenticationFailedException("Authentication failed. Invalid credentials.");
         }
     }
 

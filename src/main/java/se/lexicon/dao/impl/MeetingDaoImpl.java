@@ -60,30 +60,26 @@ public class MeetingDaoImpl implements MeetingDao {
 
     @Override
     public Optional<Meeting> findById(int id) {
-        String selectQuery = "SELECT m.*, mc.username as username, mc.title as calendarTitle FROM meetings m inner join meeting_calendars mc on m.calendar_id = mc.id WHERE m.id = ?";
+        String selectQuery = "SELECT * FROM meetings WHERE id=?";
 
-        try (
-                PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
-
+        try (PreparedStatement preparedStatement = connection.prepareStatement(selectQuery)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-
                 int meetingId = resultSet.getInt("id");
                 String title = resultSet.getString("title");
                 Timestamp startTime = resultSet.getTimestamp("start_time");
                 Timestamp endTime = resultSet.getTimestamp("end_time");
                 String description = resultSet.getString("_description");
-                int calendarId = resultSet.getInt("calendar_id");
-                String calendarUsername = resultSet.getString("username");
-                String calendarTitle = resultSet.getString("calendarTitle");
 
                 LocalDateTime startDateTime = startTime.toLocalDateTime();
                 LocalDateTime endDateTime = endTime.toLocalDateTime();
 
-                return Optional.of(new Meeting(meetingId, title, startDateTime, endDateTime, description, new Calendar(calendarId, calendarUsername, calendarTitle)));
+                // Create a Meeting object with retrieved data
+                Meeting meeting = new Meeting(meetingId, title, startDateTime, endDateTime, description);
 
+                return Optional.of(meeting);
             }
         } catch (SQLException e) {
             String errorMessage = "Error occurred while finding a meeting by ID " + id;

@@ -68,6 +68,10 @@ public class Meeting {
         return calendar;
     }
 
+    public void setCalendar(Calendar calendar) {
+        this.calendar = calendar;
+    }
+
     public String meetingInfo() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Meeting info: ").append("\n");

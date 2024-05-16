@@ -1,7 +1,6 @@
-package se.lexicon.data.impl;
+package se.lexicon.dao.impl;
 
-import se.lexicon.data.UserDao;
-import se.lexicon.data.db.MeetingCalendarDBConnection;
+import se.lexicon.dao.UserDao;
 import se.lexicon.exception.AuthenticationFieldsException;
 import se.lexicon.exception.MySQLException;
 import se.lexicon.exception.UserExpiredException;

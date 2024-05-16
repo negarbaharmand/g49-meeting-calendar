@@ -1,6 +1,6 @@
-package se.lexicon.data.impl;
+package se.lexicon.dao.impl;
 
-import se.lexicon.data.MeetingDao;
+import se.lexicon.dao.MeetingDao;
 import se.lexicon.exception.MySQLException;
 import se.lexicon.model.Calendar;
 import se.lexicon.model.Meeting;

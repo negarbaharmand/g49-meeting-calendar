@@ -1,38 +1,30 @@
 package se.lexicon;
 
-import se.lexicon.data.UserDao;
-import se.lexicon.data.db.MeetingCalendarDBConnection;
-import se.lexicon.data.impl.UserDaoImpl;
-import se.lexicon.exception.AuthenticationFieldsException;
+import se.lexicon.controller.CalendarController;
+import se.lexicon.dao.CalendarDao;
+import se.lexicon.dao.UserDao;
+import se.lexicon.dao.db.MeetingCalendarDBConnection;
+import se.lexicon.dao.impl.CalendarDaoImpl;
+import se.lexicon.dao.impl.UserDaoImpl;
 import se.lexicon.exception.CalendarExceptionHandler;
-import se.lexicon.exception.UserExpiredException;
 import se.lexicon.model.User;
+import se.lexicon.view.CalendarConsoleUI;
+import se.lexicon.view.CalendarView;
 
-import java.util.Optional;
+import java.sql.Connection;
 
 /**
  * Hello world!
  */
 public class App {
     public static void main(String[] args) {
-        try {
-            UserDao userDao = new UserDaoImpl(MeetingCalendarDBConnection.getConnection());
-            try {
-                userDao.authenticate(new User("admin", "XEfxRGkle5"));
-                System.out.println("You are logged in...");
-            } catch (Exception e) {
-                CalendarExceptionHandler.handleException(e);
-            }
-        } catch (Exception e) {
-            CalendarExceptionHandler.handleException(e);
-        }
-        //User createdUser = userDao.createUser("test1");
-        //System.out.println("userInfo = " + createdUser.userInfo());
 
-       /* Optional<User> userOptional = userDao.findByUsername("admin3");
-        if(userOptional.isPresent()){
-            System.out.println(userOptional.get().userInfo());
-        }*/
+        Connection connection = MeetingCalendarDBConnection.getConnection();
+        CalendarView view = new CalendarConsoleUI();
+        UserDao userDao = new UserDaoImpl(connection);
+        CalendarDao calendarDao = new CalendarDaoImpl(connection);
+        CalendarController controller = new CalendarController(view, userDao, calendarDao);
+        controller.run();
 
 
     }

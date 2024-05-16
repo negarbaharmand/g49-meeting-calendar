@@ -1,4 +1,4 @@
-package se.lexicon.data.db;
+package se.lexicon.dao.db;
 
 import se.lexicon.exception.DBConnectionException;
 
@@ -6,9 +6,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class MeetingCalendarOracleDBConnection {
-    private static final String DB_NAME = "meeting_calendar_oracle_db";
-    private static final String JDBC_URL = "..." + DB_NAME;
+public class MeetingCalendarDBConnection {
+    private static final String DB_NAME = "meeting_calendar_db";
+    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/" + DB_NAME;
     private static final String JDBC_USERNAME = "root";
     private static final String JDBC_PASSWORD = "1234";
 

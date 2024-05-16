@@ -1,6 +1,6 @@
-package se.lexicon.data.impl;
+package se.lexicon.dao.impl;
 
-import se.lexicon.data.CalendarDao;
+import se.lexicon.dao.CalendarDao;
 import se.lexicon.exception.MySQLException;
 import se.lexicon.model.Calendar;
 
@@ -41,7 +41,7 @@ public class CalendarDaoImpl implements CalendarDao {
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     int calendarId = generatedKeys.getInt(1);
-                    return new Calendar(calendarId, username, title);
+                    return new Calendar(calendarId, title, username);
                 } else {
                     String errorMessage = "Creating calendar failed, no ID obtained.";
                     throw new MySQLException(errorMessage);

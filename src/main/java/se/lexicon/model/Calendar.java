@@ -18,10 +18,9 @@ public class Calendar {
         this.title = title;
     }
 
-    public Calendar(int id, String title, String username, List<Meeting> meetings) {
+    public Calendar(int id, String title, String username) {
         this(title, username);
         this.id = id;
-        this.meetings = meetings;
     }
 
     public int getId() {

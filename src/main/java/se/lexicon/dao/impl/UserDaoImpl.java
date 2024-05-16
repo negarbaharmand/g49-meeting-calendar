@@ -29,7 +29,7 @@ public class UserDaoImpl implements UserDao {
             User user = new User(username);
             user.newPassword();
             preparedStatement.setString(1, user.getUsername());
-            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(2, user.getHashedPassword());
 
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows == 0) {
@@ -70,7 +70,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public boolean authenticate(User user) throws UserExpiredException, AuthenticationFieldsException {
         //step1: define a select query
-        String query = "SELECT * FROM users WHERE username = ? and _password = ?";
+        String query = "SELECT * FROM users WHERE username = ?";
         //step2: prepared statement
         try (
                 PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -78,7 +78,6 @@ public class UserDaoImpl implements UserDao {
 
             //step3: set parameters to prepared statement
             preparedStatement.setString(1, user.getUsername());
-            preparedStatement.setString(2, user.getPassword());
             //step4: execute query
             ResultSet resultSet = preparedStatement.executeQuery();
             //step5: check the result set
@@ -89,6 +88,10 @@ public class UserDaoImpl implements UserDao {
                 if (isExpired) {
                     throw new UserExpiredException("User is expired. username: " + user.getUsername());
                 }
+                // get hashed passcode from database
+                String hashedPassword = resultSet.getString("_PASSWORD");
+                // compare hashed password to the user's password
+                user.checkHash(hashedPassword);
             } else { //step8: else if the result set was null -> throw exception
                 throw new AuthenticationFieldsException("Authentication failed. Invalid credentials.");
             }
